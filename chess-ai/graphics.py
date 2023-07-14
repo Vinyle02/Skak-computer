@@ -104,11 +104,12 @@ def start(board):
         if game_over:
             draw_text(game_over_txt)
 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if game_over and event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.FK_SPACE:
                     return True
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
                 x = 7 - pygame.mouse.get_pos()[1] // 75

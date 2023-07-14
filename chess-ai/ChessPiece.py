@@ -100,7 +100,7 @@ class Knight(ChessPiece):
         return moves
 
     def get_score(self):
-        return 20
+        return 25
 
 
 class Bishop(ChessPiece):
@@ -164,7 +164,7 @@ class Rook(ChessPiece):
         return moves
 
     def get_score(self):
-        return 30
+        return 50
 
 
 class Queen(ChessPiece):
@@ -182,7 +182,7 @@ class Queen(ChessPiece):
         return moves
 
     def get_score(self):
-        return 240
+        return 90
 
 
 class King(ChessPiece):
@@ -191,6 +191,7 @@ class King(ChessPiece):
         moves = []
         moves += self.get_horizontal_moves(board)
         moves += self.get_vertical_moves(board)
+        moves += self.get_castling_moves(board)
         return moves
 
     def get_vertical_moves(self, board):
@@ -213,5 +214,13 @@ class King(ChessPiece):
                 moves.append((self.x, y))
         return moves
 
+    def get_castling_moves(self, board):
+        moves = []
+        moves += board.has_castling(board,self.color)
+        #if board.has_castling(board,self.color):
+         #   moves.append((0, 6))
+        return moves
+
+
     def get_score(self):
-        return 1000
+        return 10000
