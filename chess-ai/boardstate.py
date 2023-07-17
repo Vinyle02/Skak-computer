@@ -1,7 +1,7 @@
 from chesspiece import *
 from copy import deepcopy
 from ttable import Heuristics
-
+from color import Color
 white_king_has_moved = [False]
 black_king_gm1_has_moved = [False]
 white_rook_gm0_right_has_moved = [False]
@@ -30,37 +30,37 @@ class Board:
         self.blacks.clear()
         self.initialize_board()
         if self.game_mode == 0:
-            self.whiteKing = King('white', 0, 4, '\u265A')
-            self.blackKing = King('black', 7, 4, '\u2654')
+            self.whiteKing = King(Color.WHITE, 0, 4, '\u265A')
+            self.blackKing = King(Color.BLACK, 7, 4, '\u2654')
         else:
-            self.whiteKing = King('white', 0, 3, '\u265A')
-            self.blackKing = King('black', 7, 3, '\u2654')
+            self.whiteKing = King(Color.WHITE, 0, 3, '\u265A')
+            self.blackKing = King(Color.BLACK, 7, 3, '\u2654')
         for j in range(8):
-            self[1][j] = Pawn('white', 1, j, '\u265F')
-            self[6][j] = Pawn('black', 6, j, '\u2659')
-        self[0][0] = Rook('white', 0, 0, '\u265C')
-        self[0][7] = Rook('white', 0, 7, '\u265C')
-        self[0][1] = Knight('white', 0, 1, '\u265E')
-        self[0][6] = Knight('white', 0, 6, '\u265E')
-        self[0][2] = Bishop('white', 0, 2, '\u265D')
-        self[0][5] = Bishop('white', 0, 5, '\u265D')
+            self[1][j] = Pawn(Color.WHITE, 1, j, '\u265F')
+            self[6][j] = Pawn(Color.BLACK, 6, j, '\u2659')
+        self[0][0] = Rook(Color.WHITE, 0, 0, '\u265C')
+        self[0][7] = Rook(Color.WHITE, 0, 7, '\u265C')
+        self[0][1] = Knight(Color.WHITE, 0, 1, '\u265E')
+        self[0][6] = Knight(Color.WHITE, 0, 6, '\u265E')
+        self[0][2] = Bishop(Color.WHITE, 0, 2, '\u265D')
+        self[0][5] = Bishop(Color.WHITE, 0, 5, '\u265D')
         if self.game_mode == 0:
-            self[0][3] = Queen('white', 0, 3, '\u265B')
+            self[0][3] = Queen(Color.WHITE, 0, 3, '\u265B')
             self[0][4] = self.whiteKing
         else:
-            self[0][4] = Queen('white', 0, 4, '\u265B')
+            self[0][4] = Queen(Color.WHITE, 0, 4, '\u265B')
             self[0][3] = self.whiteKing
-        self[7][0] = Rook('black', 7, 0, '\u2656')
-        self[7][7] = Rook('black', 7, 7, '\u2656')
-        self[7][1] = Knight('black', 7, 1, '\u2658')
-        self[7][6] = Knight('black', 7, 6, '\u2658')
-        self[7][2] = Bishop('black', 7, 2, '\u2657')
-        self[7][5] = Bishop('black', 7, 5, '\u2657')
+        self[7][0] = Rook(Color.BLACK, 7, 0, '\u2656')
+        self[7][7] = Rook(Color.BLACK, 7, 7, '\u2656')
+        self[7][1] = Knight(Color.BLACK, 7, 1, '\u2658')
+        self[7][6] = Knight(Color.BLACK, 7, 6, '\u2658')
+        self[7][2] = Bishop(Color.BLACK, 7, 2, '\u2657')
+        self[7][5] = Bishop(Color.BLACK, 7, 5, '\u2657')
         if self.game_mode == 0:
-            self[7][3] = Queen('black', 7, 3, '\u2655')
+            self[7][3] = Queen(Color.BLACK, 7, 3, '\u2655')
             self[7][4] = self.blackKing
         else:
-            self[7][4] = Queen('black', 7, 4, '\u2655')
+            self[7][4] = Queen(Color.BLACK, 7, 4, '\u2655')
             self[7][3] = self.blackKing
 
 
@@ -71,7 +71,7 @@ class Board:
 
     def save_pieces(self):
         for i, j in self.piece_positions():
-            if self[i][j].color == 'white':
+            if self[i][j].color == Color.WHITE:
                 self.whites.append(self[i][j])
             else:
                 self.blacks.append(self[i][j])
@@ -118,7 +118,7 @@ class Board:
             self.board[old_x][old_y].set_last_eaten(self.board[x][y])
         else:
             if isinstance(self.board[x][y], chesspiece):
-                if self.board[x][y].color == 'white':
+                if self.board[x][y].color == Color.WHITE:
                     self.whites.remove(self.board[x][y])
                 else:
                     self.blacks.remove(self.board[x][y])
@@ -230,11 +230,11 @@ class Board:
 
     def get_player_color(self):
         if self.game_mode == 0:
-            return 'white'
-        return 'black'
+            return Color.WHITE
+        return Color.BLACK
 
     def king_is_threatened(self, color, move=None):
-        if color == 'white':
+        if color == Color.WHITE:
             enemies = self.blacks
             king = self.whiteKing
         else:
@@ -256,21 +256,21 @@ class Board:
         return terminal1 or terminal2 or terminal3
 
     def draw(self):
-        if not self.king_is_threatened('white') and not self.has_moves('white'):
+        if not self.king_is_threatened(Color.WHITE) and not self.has_moves(Color.WHITE):
             return True
-        if not self.king_is_threatened('black') and not self.has_moves('black'):
+        if not self.king_is_threatened(Color.BLACK) and not self.has_moves(Color.BLACK):
             return True
         if self.insufficient_material():
             return True
         return False
 
     def white_won(self):
-        if self.king_is_threatened('black') and not self.has_moves('black'):
+        if self.king_is_threatened(Color.BLACK) and not self.has_moves(Color.BLACK):
             return True
         return False
 
     def black_won(self):
-        if self.king_is_threatened('white') and not self.has_moves('white'):
+        if self.king_is_threatened(Color.WHITE) and not self.has_moves(Color.WHITE):
             return True
         return False
 
@@ -346,7 +346,7 @@ class Board:
         #j = horizontal
         for i, j in self.piece_positions():
             piece = self[i][j]
-            if piece.color == 'white':
+            if piece.color == Color.WHITE:
                 if i == 4:
                     white_points += 1
                 #white_points += 4 - abs(i - 4)
@@ -387,7 +387,7 @@ class Board:
         return data[::-1]
 
     def get_king(self, piece):
-        if piece.color == 'white':
+        if piece.color == Color.WHITE:
             return self.whiteKing
         return self.blackKing
 

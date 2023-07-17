@@ -1,6 +1,6 @@
 import operator
 from itertools import product
-
+from color import Color
 
 class chesspiece:
 
@@ -62,7 +62,7 @@ class Pawn(chesspiece):
 
     def get_moves(self, board):
         moves = []
-        if board.game_mode == 0 and self.color == 'white' or board.game_mode == 1 and self.color == 'black':
+        if board.game_mode == 0 and self.color == Color.WHITE or board.game_mode == 1 and self.color == Color.BLACK:
             direction = 1
         else:
             direction = -1

@@ -1,7 +1,6 @@
 import pygame
 from chesspiece import *
 from computer import get_random_move, get_ai_move, get_ai_move2
-
 dark_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown dark_png_shadow_128px.png')
 light_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown light_png_shadow_128px.png')
 dark_block = pygame.transform.scale(dark_block, (75, 75))
@@ -66,7 +65,7 @@ def draw_background(board):
     for i in range(8):
         for j in range(8):
             if isinstance(board[i][j], chesspiece):
-                obj = globals()[f'{board[i][j].color}{board[i][j].type}']
+                obj = globals()[f'{board[i][j].color.name()}{board[i][j].type}']
                 screen.blit(obj, (step_x, step_y))
             step_x += 75
         step_x = 0
