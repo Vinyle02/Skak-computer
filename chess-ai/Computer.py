@@ -22,76 +22,73 @@ def minimax(board, depth,max_player, alpha, beta, save_move=False,):
 
     if max_player:
         max_eval = -900000000000
-        for i in range(8):
-            for j in range(8):
-                if isinstance(board[i][j], ChessPiece) and board[i][j].color != board.get_player_color():
-                    piece = board[i][j]
-                    moves = piece.get_moves(board)
-                    if moves:
-                        for move in moves:
+        for i, j in board.piece_positions():
+            if board[i][j].color != board.get_player_color():
+                piece = board[i][j]
+                moves = piece.get_moves(board)
+                if moves:
+                    for move in moves:
 
-                            board.make_move(piece, move[0], move[1], True)
-                            mini = minimax(board, depth - 1, False, alpha, beta)
+                        board.make_move(piece, move[0], move[1], True)
+                        mini = minimax(board, depth - 1, False, alpha, beta)
 
-                            enemy_data = mini[0][2]
-                            evaluation = board.evaluate() + enemy_data
+                        enemy_data = mini[0][2]
+                        evaluation = board.evaluate() + enemy_data
 
-                            if evaluation > max_eval:
+                        if evaluation > max_eval:
 
-                                data.clear()
-                                data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
+                            data.clear()
+                            data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
 
-                           # elif evaluation == max_eval:
-                           #     data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
-                            max_eval = max(max_eval, evaluation)
-                            positions_evaluated += 1
-                            board.unmake_move(piece)
-                            alpha = max(alpha, max_eval)
-                            if beta <= alpha:
-                                break
+                        # elif evaluation == max_eval:
+                        #     data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
+                        max_eval = max(max_eval, evaluation)
+                        positions_evaluated += 1
+                        board.unmake_move(piece)
+                        alpha = max(alpha, max_eval)
+                        if beta <= alpha:
+                            break
         return data
     else:
         min_eval = 9000000000
 
-        for i in range(8):
-            for j in range(8):
-                if isinstance(board[i][j], ChessPiece) and board[i][j].color == board.get_player_color():
-                    piece = board[i][j]
-                    moves = piece.get_moves(board)
-                    if moves:
-                        for move in moves:
+        for i, j in board.piece_positions():
+            if board[i][j].color == board.get_player_color():
+                piece = board[i][j]
+                moves = piece.get_moves(board)
+                if moves:
+                    for move in moves:
 
-                            board.make_move(piece, move[0], move[1], True)
-                            mini = minimax(board, depth-1,True, alpha, beta)
+                        board.make_move(piece, move[0], move[1], True)
+                        mini = minimax(board, depth-1,True, alpha, beta)
 
-                            enemy_data = mini[0][2]
-                            evaluation = board.evaluate() + enemy_data
+                        enemy_data = mini[0][2]
+                        evaluation = board.evaluate() + enemy_data
 
-                            if evaluation <= min_eval:
-                                data.clear()
-                                data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
-                           # elif evaluation == min_eval:
-                            #    data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
-                            min_eval = min(min_eval, evaluation)
-                            positions_evaluated += 1
-                            board.unmake_move(piece)
-                            beta = min(beta, min_eval)
-                            if beta <= alpha:
-                                break
+                        if evaluation <= min_eval:
+                            data.clear()
+                            data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
+                        # elif evaluation == min_eval:
+                        #    data.append([piece,move,evaluation,mini[0][0],mini[0][1]])
+                        min_eval = min(min_eval, evaluation)
+                        positions_evaluated += 1
+                        board.unmake_move(piece)
+                        beta = min(beta, min_eval)
+                        if beta <= alpha:
+                            break
         return data
 
 def get_sorted_moves(board, maximising):
     moves = []
-    for i in range(8):
-        for j in range(8):
-            piece = board[i][j]
-            if isinstance(piece, ChessPiece) and ((maximising and piece.color != board.get_player_color()) or
-                                                  (not maximising and piece.color == board.get_player_color())):
-                for move in piece.get_moves(board):
-                    board.make_move(piece, move[0], move[1], True)  # Make the move
-                    score = board.evaluate()
-                    moves.append((score, piece, move))
-                    board.unmake_move(piece)  # Undo the move
+    for i, j in board.piece_positions():
+        piece = board[i][j]
+        if ((maximising and piece.color != board.get_player_color()) or
+                                                (not maximising and piece.color == board.get_player_color())):
+            for move in piece.get_moves(board):
+                board.make_move(piece, move[0], move[1], True)  # Make the move
+                score = board.evaluate()
+                moves.append((score, piece, move))
+                board.unmake_move(piece)  # Undo the move
 
     # Sort the moves in descending order of score if maximising player, and ascending if minimising
     moves.sort(key=lambda x: x[0], reverse=maximising)

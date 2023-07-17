@@ -70,13 +70,11 @@ class Board:
             self.reverse()
 
     def save_pieces(self):
-        for i in range(8):
-            for j in range(8):
-                if isinstance(self[i][j], ChessPiece):
-                    if self[i][j].color == 'white':
-                        self.whites.append(self[i][j])
-                    else:
-                        self.blacks.append(self[i][j])
+        for i, j in self.piece_positions():
+            if self[i][j].color == 'white':
+                self.whites.append(self[i][j])
+            else:
+                self.blacks.append(self[i][j])
 
     def make_move(self, piece, x, y, keep_history=False):    # history is logged when ai searches for moves
         global white_king_has_moved
@@ -199,12 +197,10 @@ class Board:
 
     def reverse(self):
         self.board = self.board[::-1]
-        for i in range(8):
-            for j in range(8):
-                if isinstance(self.board[i][j], ChessPiece):
-                    piece = self.board[i][j]
-                    piece.x = i
-                    piece.y = j
+        for i, j in self.piece_positions():
+            piece = self.board[i][j]
+            piece.x = i
+            piece.y = j
 
     def __getitem__(self, item):
         return self.board[item]
@@ -278,15 +274,24 @@ class Board:
             return True
         return False
 
-    def has_moves(self, color):
-        total_moves = 0
+    def piece_positions(self):
+        positions = []
         for i in range(8):
             for j in range(8):
-                if isinstance(self[i][j], ChessPiece) and self[i][j].color == color:
-                    piece = self[i][j]
-                    total_moves += len(piece.filter_moves(piece.get_moves(self), self))
-                    if total_moves > 0:
-                        return True
+                if isinstance(self[i][j], ChessPiece):
+                    positions.append((i, j))
+        return positions
+        
+    def player_pieces(self, color):
+        return [(i, j) for i, j in self.piece_positions() if self.board[i][j].color == color]
+    
+    def has_moves(self, color):
+        total_moves = 0
+        for i, j in player_pieces(color):
+            piece = self[i][j]
+            total_moves += len(piece.filter_moves(piece.get_moves(self), self))
+            if total_moves > 0:
+                return True
         return False
 
     def insufficient_material(self):
@@ -339,29 +344,27 @@ class Board:
         black_points = 0
         #i = vertical starting from bottom 0
         #j = horizontal
-        for i in range(8):
-            for j in range(8):
-                if isinstance(self[i][j], ChessPiece):
-                    piece = self[i][j]
-                    if piece.color == 'white':
-                        if i == 4:
-                            white_points += 1
-                        #white_points += 4 - abs(i - 4)
-                        white_points += 4 - abs(j - 4)
+        for i, j in self.piece_positions():
+            piece = self[i][j]
+            if piece.color == 'white':
+                if i == 4:
+                    white_points += 1
+                #white_points += 4 - abs(i - 4)
+                white_points += 4 - abs(j - 4)
 
-                        #if j == 4:
-                         #   white_points += 1
-                        white_points += piece.get_score()
+                #if j == 4:
+                    #   white_points += 1
+                white_points += piece.get_score()
 
-                    else:
-                        if i == 4:
-                            black_points += 1
-                        #black_points += 4 - abs(i - 4)
-                        black_points += 4 - abs(j - 4)
+            else:
+                if i == 4:
+                    black_points += 1
+                #black_points += 4 - abs(i - 4)
+                black_points += 4 - abs(j - 4)
 
-                        #if j == 4:
-                         #   black_points += 1
-                        black_points += piece.get_score()
+                #if j == 4:
+                    #   black_points += 1
+                black_points += piece.get_score()
         if self.get_player_color() == "white":
             return black_points - white_points
         return white_points - black_points
