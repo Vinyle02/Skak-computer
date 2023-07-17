@@ -334,7 +334,7 @@ class Board:
             if weak_white_pieces == weak_black_pieces == 1 and total_other_white_pieces == total_other_black_pieces == 0:
                 return True
 
-    def evaluate(self, max_player):
+    def evaluate(self):
         white_points = 0
         black_points = 0
         #i = vertical starting from bottom 0
@@ -362,7 +362,7 @@ class Board:
                         #if j == 4:
                          #   black_points += 1
                         black_points += piece.get_score()
-        if not max_player:
+        if self.get_player_color() == "white":
             return black_points - white_points
         return white_points - black_points
 
