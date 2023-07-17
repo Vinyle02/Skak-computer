@@ -135,8 +135,8 @@ def get_ai_move(board):
         graphics.game_over_txt = 'BLACK WINS!'
     else:
         board.make_move(piece,best_move[0],best_move[1])
-    print(f"Computer best move: {data[random_move][3]} moving to {data[random_move][4]}")
-    print(f"Actual best move: {minimax(board,3,False, -10000, 10000)[0][:2]}")
+    print(f"Computer best move: {data[random_move][3]} moving to {data[random_move][4]} with eval {data[random_move][2]}")
+    print(f"Actual best move: {minimax(board,3,False, -10000, 10000)[0][:2]} with eval {data[random_move][2]}")
     #print(f"The board is the same: {board == data[random_move][5]}")
     #print(data[random_move][5])
     turn += 1
