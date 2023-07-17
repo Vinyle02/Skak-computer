@@ -1,4 +1,4 @@
-from ChessPiece import *
+from chesspiece import *
 import math
 
 def minimax(board, depth,max_player, alpha, beta, save_move, data):
@@ -17,7 +17,7 @@ def minimax(board, depth,max_player, alpha, beta, save_move, data):
         max_eval = -math.inf
         for i in range(8):
             for j in range(8):
-                if isinstance(board[i][j], ChessPiece) and board[i][j].color != board.get_player_color():
+                if isinstance(board[i][j], chesspiece) and board[i][j].color != board.get_player_color():
                     piece = board[i][j]
                     moves = piece.filter_moves(piece.get_moves(board), board)
                     for move in moves:
@@ -41,7 +41,7 @@ def minimax(board, depth,max_player, alpha, beta, save_move, data):
         min_eval = math.inf
         for i in range(8):
             for j in range(8):
-                if isinstance(board[i][j], ChessPiece) and board[i][j].color == board.get_player_color():
+                if isinstance(board[i][j], chesspiece) and board[i][j].color == board.get_player_color():
                     piece = board[i][j]
                     moves = piece.get_moves(board)
                     for move in moves:

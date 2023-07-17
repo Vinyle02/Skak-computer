@@ -1,6 +1,5 @@
 import graphics
-from Board import *
-import random
+from boardstate import *
 
 
 if __name__ == '__main__':

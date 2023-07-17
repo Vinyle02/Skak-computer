@@ -1,5 +1,4 @@
-import Computer as pc
-import Board as board
+import computer as pc
 
 def minimax(board, depth,max_player, alpha, beta, save_move=False,):
     global positions_evaluated

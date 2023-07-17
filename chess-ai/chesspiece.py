@@ -2,7 +2,7 @@ import operator
 from itertools import product
 
 
-class ChessPiece:
+class chesspiece:
 
     # history is used to keep data, so board.unmake_move() works properly.
     eaten_pieces_history = []
@@ -58,7 +58,7 @@ class ChessPiece:
         return '{}: {}|{},{}'.format(self.type, self.color, self.x, self.y)
 
 
-class Pawn(ChessPiece):
+class Pawn(chesspiece):
 
     def get_moves(self, board):
         moves = []
@@ -83,7 +83,7 @@ class Pawn(ChessPiece):
         return 10
 
 
-class Knight(ChessPiece):
+class Knight(chesspiece):
 
     def get_moves(self, board):
         moves = []
@@ -103,7 +103,7 @@ class Knight(ChessPiece):
         return 25
 
 
-class Bishop(ChessPiece):
+class Bishop(chesspiece):
 
     def get_moves(self, board):
         moves = []
@@ -127,7 +127,7 @@ class Bishop(ChessPiece):
         return 30
 
 
-class Rook(ChessPiece):
+class Rook(chesspiece):
 
     def get_moves(self, board):
         moves = []
@@ -167,7 +167,7 @@ class Rook(ChessPiece):
         return 50
 
 
-class Queen(ChessPiece):
+class Queen(chesspiece):
 
     def get_moves(self, board):
         moves = []
@@ -185,7 +185,7 @@ class Queen(ChessPiece):
         return 90
 
 
-class King(ChessPiece):
+class King(chesspiece):
 
     def get_moves(self, board):
         moves = []

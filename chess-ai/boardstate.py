@@ -1,6 +1,6 @@
-from ChessPiece import *
+from chesspiece import *
 from copy import deepcopy
-from TranspositionTables import Heuristics
+from ttable import Heuristics
 
 white_king_has_moved = [False]
 black_king_gm1_has_moved = [False]
@@ -117,7 +117,7 @@ class Board:
         if keep_history:
             self.board[old_x][old_y].set_last_eaten(self.board[x][y])
         else:
-            if isinstance(self.board[x][y], ChessPiece):
+            if isinstance(self.board[x][y], chesspiece):
                 if self.board[x][y].color == 'white':
                     self.whites.remove(self.board[x][y])
                 else:
@@ -208,14 +208,14 @@ class Board:
     def has_opponent(self, piece, x, y):
         if not self.is_valid_move(x, y):
             return False
-        if isinstance(self.board[x][y], ChessPiece):
+        if isinstance(self.board[x][y], chesspiece):
             return piece.color != self[x][y].color
         return False
 
     def has_friend(self, piece, x, y):
         if not self.is_valid_move(x, y):
             return False
-        if isinstance(self[x][y], ChessPiece):
+        if isinstance(self[x][y], chesspiece):
             return piece.color == self[x][y].color
         return False
 
@@ -226,7 +226,7 @@ class Board:
     def has_empty_block(self, x, y):
         if not self.is_valid_move(x, y):
             return False
-        return not isinstance(self[x][y], ChessPiece)
+        return not isinstance(self[x][y], chesspiece)
 
     def get_player_color(self):
         if self.game_mode == 0:
@@ -278,7 +278,7 @@ class Board:
         positions = []
         for i in range(8):
             for j in range(8):
-                if isinstance(self[i][j], ChessPiece):
+                if isinstance(self[i][j], chesspiece):
                     positions.append((i, j))
         return positions
         
@@ -287,7 +287,7 @@ class Board:
     
     def has_moves(self, color):
         total_moves = 0
-        for i, j in player_pieces(color):
+        for i, j in self.player_pieces(color):
             piece = self[i][j]
             total_moves += len(piece.filter_moves(piece.get_moves(self), self))
             if total_moves > 0:
@@ -379,7 +379,7 @@ class Board:
         data = deepcopy(self.board)
         for idx, row in enumerate(self.board):
             for i, p in enumerate(row):
-                if isinstance(p, ChessPiece):
+                if isinstance(p, chesspiece):
                     un = p.unicode
                 else:
                     un = '\u25AF'

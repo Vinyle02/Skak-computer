@@ -1,6 +1,6 @@
 import pygame
-from ChessPiece import *
-from Computer import get_random_move, get_ai_move, get_ai_move2
+from chesspiece import *
+from computer import get_random_move, get_ai_move, get_ai_move2
 
 dark_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown dark_png_shadow_128px.png')
 light_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown light_png_shadow_128px.png')
@@ -65,7 +65,7 @@ def draw_background(board):
     step_y = pygame.display.get_surface().get_size()[0] - 75
     for i in range(8):
         for j in range(8):
-            if isinstance(board[i][j], ChessPiece):
+            if isinstance(board[i][j], chesspiece):
                 obj = globals()[f'{board[i][j].color}{board[i][j].type}']
                 screen.blit(obj, (step_x, step_y))
             step_x += 75
@@ -114,7 +114,7 @@ def start(board):
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
                 x = 7 - pygame.mouse.get_pos()[1] // 75
                 y = pygame.mouse.get_pos()[0] // 75
-                if isinstance(board[x][y], ChessPiece) and (board.get_player_color() == board[x][y].color or not board.ai) and (x, y) not in possible_piece_moves:
+                if isinstance(board[x][y], chesspiece) and (board.get_player_color() == board[x][y].color or not board.ai) and (x, y) not in possible_piece_moves:
                     piece = board[x][y]
                     moves = piece.filter_moves(piece.get_moves(board), board)
                     move_positions = []

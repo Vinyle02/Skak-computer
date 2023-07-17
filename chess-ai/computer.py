@@ -1,12 +1,12 @@
 import math
-from Board import Board
-from ChessPiece import *
+from boardstate import Board
+from chesspiece import *
 import graphics
 import time
-import Minimax_V3
-import MinimaxV2
+import minimax_v3
+import minimax_v2
 from functools import wraps
-from Logger import Logger, BoardRepr
+from logger import Logger, BoardRepr
 import random
 
 
@@ -101,7 +101,7 @@ def get_ai_move(board):
     start = time.perf_counter()
     print("Loading moves...")
     board.has_castling(board,"white")
-    data = MinimaxV2.minimax(board,4,True, -10000, 10000)
+    data = minimax_v2.minimax(board,4,True, -10000, 10000)
     random_move = 0
     #if len(data) > 1:
      #   random_move = random.randint(0,len(data)-1)
@@ -152,7 +152,7 @@ def get_ai_move2(board):
     start = time.perf_counter()
     print("Loading moves...")
     board.has_castling(board,"white")
-    data = Minimax_V3.minimax(board,4,True, -10000, 10000, True, [[],0])
+    data = minimax_v3.minimax(board,4,True, -10000, 10000, True, [[],0])
     sorted_list = sorted(data[0], key=lambda x: x[2], reverse=True)
     random_move = 0
     #if len(data) > 1:
