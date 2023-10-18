@@ -1,14 +1,18 @@
 # Chess AI
 
-This a very basic chess game with an ai implementation using the minimax algorithm; built in python and pygame.
+### Introduction
 
-To begin the game, a player has to run the main.py file providing the game mode and the depth. The game mode must be equal to 0 or 1 and it's the color of the chosen pieces (zero for whites and one for blacks). The depth is the number of times that the computer "runs a simulation of the game".
-For example, if the depth is 2 and it is the computers turn, the computer will simulate every possible move it has available, and for every one of those moves, it will also play every possible move of their opponenent. To run the simulation the computer always assumes that the player plays the move in their best interest. The return value is a list containing (piece, move) tuples with the highest score.
+
+Welcome to my chesscomputer. This is my first big project using python. It works using the minimax algorithm, which simulates every position a certain depth into the future. Then it evaluates all moves, and when it is done, it returns the best move for the AI, if both players play optimally, at least according to its evaluation function.
+
+The difficult thing about this project, is that it quickly evaluates millions of positions, and then when there is a bug, it could be countless of places it went wrong, and it's not always easy to find which edgecase came up. Therefore it is extremely important that everything is streamlined, and whenever you simulates moves in the future, everything must be put back to place in the position and state it was.
+
+The fun thing about this project, is that it is heavily reliant on effeciency and fast code. As you code is ran millions of times over and over, small changes can have a big impact. The first prototype, could only search with a depth of 3, within an acceptabel timeframe on my device (1-5 secs). But as I continuously improved the search algorithm and the evaluation algorithm, I was able to improve the speed by 150x, which then allowed me to highten the depth to 5 and sometimes 6.
 ***
-### Board
+### AI
 
 
-The Board class consists of a simple 2D list to store the chess pieces and a number of required methods like make_move(), unmake_move() (which is necessary for the minimax algorithm), methods to check if the game is finished, and an evaluation method which returns the total score of the caller's pieces minus the total score of the opponent's pieces (also required for the ai).
+As I didn't want to spend time building a chess game from scratch, I found a chess game on Github, and implemented my own AI. My primary work is therefor in the Computer.py file, however I have tweaked the code in many places.
 ***
 ### Chess Piece
 

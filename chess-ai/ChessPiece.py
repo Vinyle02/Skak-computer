@@ -80,7 +80,7 @@ class Pawn(ChessPiece):
         return moves
 
     def get_score(self):
-        return 10
+        return 100
 
 
 class Knight(ChessPiece):
@@ -100,7 +100,7 @@ class Knight(ChessPiece):
         return moves
 
     def get_score(self):
-        return 25
+        return 280
 
 
 class Bishop(ChessPiece):
@@ -124,7 +124,7 @@ class Bishop(ChessPiece):
         return moves
 
     def get_score(self):
-        return 30
+        return 320
 
 
 class Rook(ChessPiece):
@@ -164,7 +164,7 @@ class Rook(ChessPiece):
         return moves
 
     def get_score(self):
-        return 50
+        return 479
 
 
 class Queen(ChessPiece):
@@ -182,7 +182,7 @@ class Queen(ChessPiece):
         return moves
 
     def get_score(self):
-        return 90
+        return 929
 
 
 class King(ChessPiece):
@@ -217,10 +217,8 @@ class King(ChessPiece):
     def get_castling_moves(self, board):
         moves = []
         moves += board.has_castling(board,self.color)
-        #if board.has_castling(board,self.color):
-         #   moves.append((0, 6))
         return moves
 
 
     def get_score(self):
-        return 10000
+        return 10000000

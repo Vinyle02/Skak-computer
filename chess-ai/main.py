@@ -2,13 +2,12 @@ import graphics
 from Board import *
 import random
 
-
 if __name__ == '__main__':
     keep_playing = True
 
-    #random_start = random.randint(0, 1)
-    random_start = 1
-    board = Board(game_mode=random_start, ai=True, depth=1, log=True)  # game_mode == 0: whites down / 1: blacks down
+    start = random.randint(0, 1)
+    #start = 0
+    board = Board(game_mode=start, ai=True, depth=1, log=True)  # game_mode == 0: whites down / 1: blacks down
 
     while keep_playing:
         graphics.initialize()

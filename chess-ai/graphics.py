@@ -1,6 +1,6 @@
 import pygame
 from ChessPiece import *
-from Computer import get_random_move, get_ai_move, get_ai_move2
+from Computer import get_ai_move
 
 dark_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown dark_png_shadow_128px.png')
 light_block = pygame.image.load('assets/JohnPablok Cburnett Chess set/128px/square brown light_png_shadow_128px.png')

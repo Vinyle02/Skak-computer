@@ -1,6 +1,6 @@
 from ChessPiece import *
 from copy import deepcopy
-from TranspositionTables import Heuristics
+from TranspositionTables import pst, pst2
 
 white_king_has_moved = [False]
 black_king_gm1_has_moved = [False]
@@ -8,6 +8,11 @@ white_rook_gm0_right_has_moved = [False]
 white_rook_gm0_left_has_moved = [False]
 black_rook_gm1_right_has_moved = [False]
 black_rook_gm1_left_has_moved = [False]
+white_rook_gm1_right_has_moved = [False]
+white_rook_gm1_left_has_moved = [False]
+black_rook_gm0_right_has_moved = [False]
+black_rook_gm0_left_has_moved = [False]
+
 
 class Board:
 
@@ -80,38 +85,61 @@ class Board:
 
     def make_move(self, piece, x, y, keep_history=False):    # history is logged when ai searches for moves
         global white_king_has_moved
+        if type(piece) == str:
+            print(piece)
+            print(f"{x}, {y}")
+        #If it is a white pawn
+       # if piece.unicode == '\u265F':
+        #    if x == 7
+        #elif piece.unicode == '\u2659':
+         #   pass
         #If it is the white king
-        if piece.unicode == '\u265A':
+        elif piece.unicode == '\u265A':
             #If it is moving to the castle square and it is still standing on the original square
             if x == 0 and y == 6 and piece.x == 0 and piece.y == 4:
                 self.make_move(self[0][7], 0, 5, keep_history=True)
             if x == 0 and y == 2 and piece.x == 0 and piece.y == 4:
                 self.make_move(self[0][0], 0, 3, keep_history=True)
+            #if x == 7 and y == 6 and piece.x == 7 and piece.y == 4:
+            #    self.make_move(self[7][7], 7, 5, keep_history=True)
+            #if x == 7 and y == 2 and piece.x == 7 and piece.y == 2:
+            #    self.make_move(self[7][2], 7, 2, keep_history=True)
             white_king_has_moved.append(True)
         #If it is the black king
-        if piece.unicode == '\u2654':
+        elif piece.unicode == '\u2654':
             #If it is moving to the castle square and it is still standing on the original square
             if x == 0 and y == 1 and piece.x == 0 and piece.y == 3:
                 self.make_move(self[0][0], 0, 2, keep_history=True)
             if x == 0 and y == 5 and piece.x == 0 and piece.y == 3:
                 self.make_move(self[0][7], 0, 4, keep_history=True)
+            #if x == 7 and y == 1 and piece.x == 7 and piece.y == 3:
+            #    self.make_move(self[0][0], 0, 2, keep_history=True)
+            #if x == 7 and y == 5 and piece.x == 7 and piece.y == 3:
+            #    self.make_move(self[7][7], 7, 4, keep_history=True)
             black_king_gm1_has_moved.append(True)
 
         #If it a white rook
-        if piece.unicode == '\u265C':
+        elif piece.unicode == '\u265C':
             #If it is the rook standing in the right corner
             if piece.x == 0 and piece.y == 7:
                 white_rook_gm0_right_has_moved.append(True)
             if piece.x == 0 and piece.y == 0:
                 white_rook_gm0_left_has_moved.append(True)
-
+            #if piece.x == 7 and piece.y == 7:
+            #    white_rook_gm1_right_has_moved.append(True)
+            #if piece.x == 7 and piece.y == 0:
+            #    white_rook_gm1_left_has_moved.append(True)
         #If it a black rook
-        if piece.unicode == '\u2656':
+        elif piece.unicode == '\u2656':
             #If it is the rook standing in the right corner
             if piece.x == 0 and piece.y == 0:
                 black_rook_gm1_left_has_moved.append(True)
             if piece.x == 0 and piece.y == 7:
                 black_rook_gm1_right_has_moved.append(True)
+            #if piece.x == 7 and piece.y == 0:
+            #    black_rook_gm0_left_has_moved.append(True)
+            #if piece.x == 7 and piece.y == 7:
+            #    black_rook_gm0_right_has_moved.append(True)
 
 
         old_x = piece.x
@@ -143,7 +171,7 @@ class Board:
             #If it was standing on the castle square
             if x == 0 and y == 6:
                 #If there is pieces standing on the castle squares
-                if self[0][4] != 'empty-block' and self[0][5] != 'empty-block':
+                if self[0][5] != 'empty-block' and self[0][6] != 'empty-block':
                     #If the pieces standing there are the king and rook
                     if self[0][5].unicode == '\u265C' and self[0][6].unicode == '\u265A':
                         #If it moving back to the kings square
@@ -157,6 +185,23 @@ class Board:
                         #If it moving back to the kings square
                         if old_x == 0 and old_y == 4:
                             self.unmake_move(self[0][3])
+            #If it was standing on the castle square
+            #if x == 7 and y == 6:
+            #    #If there is pieces standing on the castle squares
+            #    if self[7][5] != 'empty-block' and self[7][6] != 'empty-block':
+             #       #If the pieces standing there are the king and rook
+            #        if self[7][5].unicode == '\u265C' and self[7][6].unicode == '\u265A':
+            #            #If it moving back to the kings square
+            #            if old_x == 7 and old_y == 4:
+            #                self.unmake_move(self[7][5])
+            #if x == 7 and y == 2:
+            #    #If there is pieces standing on the castle squares
+            #    if self[7][3] != 'empty-block' and self[7][2] != 'empty-block':
+            #        #If the pieces standing there are the king and rook
+            #        if self[7][3].unicode == '\u265C' and self[7][2].unicode == '\u265A':
+            #            #If it moving back to the kings square
+            #            if old_x == 7 and old_y == 4:
+            #                self.unmake_move(self[7][3])
 
         #If it is the black king
         if piece.unicode == '\u2654':
@@ -178,6 +223,23 @@ class Board:
                         #If it moving back to the kings square
                         if old_x == 0 and old_y == 3:
                             self.unmake_move(self[0][4])
+            #If it was standing on the castle square
+            #if x == 7 and y == 1:
+            #    #If there is pieces standing on the castle squares
+            #    if self[7][1] != 'empty-block' and self[7][2] != 'empty-block':
+            #        #If the pieces standing there are the king and rook
+            #        if self[7][1].unicode == '\u2654' and self[7][2].unicode == '\u2656':
+            #            #If it moving back to the kings square
+            #            if old_x == 7 and old_y == 3:
+            #                self.unmake_move(self[7][2])
+            #elif x == 7 and y == 5:
+            #    #If there is pieces standing on the castle squares
+            #    if self[7][4] != 'empty-block' and self[7][5] != 'empty-block':
+            #        #If the pieces standing there are the king and rook
+            #        if self[7][5].unicode == '\u2654' and self[7][4].unicode == '\u2656':
+            #            #If it moving back to the kings square
+            #            if old_x == 7 and old_y == 3:
+            #                self.unmake_move(self[7][4])
 
         #If it is the white rook
         if piece.unicode == '\u265C':
@@ -185,6 +247,10 @@ class Board:
                 white_rook_gm0_right_has_moved.pop()
             if old_x == 0 and old_y == 0:
                 white_rook_gm0_left_has_moved.pop()
+            #if old_x == 7 and old_y == 7:
+            #    white_rook_gm1_right_has_moved.pop()
+            #if old_x == 7 and old_y == 0:
+            #    white_rook_gm1_left_has_moved.pop()
 
         #If it is the black rook
         if piece.unicode == '\u2656':
@@ -192,6 +258,10 @@ class Board:
                 black_rook_gm1_left_has_moved.pop()
             if old_x == 0 and old_y == 7:
                 black_rook_gm1_right_has_moved.pop()
+            #if old_x == 7 and old_y == 0:
+            #    black_rook_gm0_left_has_moved.pop()
+            #if old_x == 7 and old_y == 7:
+            #    black_rook_gm0_right_has_moved.pop()
 
         self.board[old_x][old_y] = self.board[x][y]
         self.board[x][y] = piece.get_last_eaten()
@@ -337,34 +407,60 @@ class Board:
     def evaluate(self):
         white_points = 0
         black_points = 0
+
+
+
         #i = vertical starting from bottom 0
         #j = horizontal
+
         for i in range(8):
             for j in range(8):
                 if isinstance(self[i][j], ChessPiece):
                     piece = self[i][j]
-                    if piece.color == 'white':
-                        if i == 4:
-                            white_points += 1
-                        #white_points += 4 - abs(i - 4)
-                        white_points += 4 - abs(j - 4)
 
-                        #if j == 4:
-                         #   white_points += 1
+                    if piece.color == 'white':
+                        #Get position score
+                        if self.get_player_color() == "black":
+                            white_points += pst[piece.type][i*8+j]
+                        else:
+                            white_points += pst2[piece.type][i*8+j]
+                        #Get piece score
                         white_points += piece.get_score()
 
                     else:
-                        if i == 4:
-                            black_points += 1
-                        #black_points += 4 - abs(i - 4)
-                        black_points += 4 - abs(j - 4)
-
-                        #if j == 4:
-                         #   black_points += 1
+                        if self.get_player_color() == "black":
+                            black_points += pst2[piece.type][i*8+j]
+                        else:
+                            black_points += pst[piece.type][i*8+j]
                         black_points += piece.get_score()
         if self.get_player_color() == "white":
             return black_points - white_points
         return white_points - black_points
+
+    def evaluate_move(self, piece, cur_x, cur_y, move_x, move_y, color):
+        if color == "white":
+            if self.get_player_color() == "black":
+                move_diff = pst[piece.type][move_x * 8 + move_y] - pst[piece.type][cur_x * 8 + cur_y]
+            else:
+                move_diff = pst2[piece.type][move_x * 8 + move_y] - pst2[piece.type][cur_x * 8 + cur_y]
+        else:
+            if self.get_player_color() == "black":
+                move_diff = pst2[piece.type][move_x * 8 + move_y] - pst2[piece.type][cur_x * 8 + cur_y]
+            else:
+                move_diff = pst[piece.type][move_x * 8 + move_y] - pst[piece.type][cur_x * 8 + cur_y]
+        attacking_square = self[move_x][move_y]
+        killed_piece_val = 0
+        if attacking_square != 'empty-block':
+            killed_piece_val += attacking_square.get_score()
+        if color == "white":
+            if self.get_player_color() == "black":
+                return move_diff + killed_piece_val
+            return -(move_diff + killed_piece_val)
+        else:
+            if self.get_player_color() == "black":
+                return -(move_diff + killed_piece_val)
+        return move_diff + killed_piece_val
+
 
     def __str__(self):
         return str(self[::-1]).replace('], ', ']\n')
@@ -399,24 +495,24 @@ class Board:
                             # If neither the king or rook has moved
                         if not white_king_has_moved[-1] and not white_rook_gm0_right_has_moved[-1]:
                                 # If the king is not in check
-                            if self.king_is_threatened(color) == False:
+                            #if self.king_is_threatened(color) == False:
 
-                                self.make_move(self.whiteKing, short_square1[0], short_square1[1], keep_history=True)
-                                    # If the square next to is not threatened
-                                if self.king_is_threatened(color, (short_square1[0], short_square1[1])) == False:
-                                    self.unmake_move(self.whiteKing)
-                                    return True
+                            self.make_move(self.whiteKing, short_square1[0], short_square1[1], keep_history=True)
+                                # If the square next to is not threatened
+                            if self.king_is_threatened(color, (short_square1[0], short_square1[1])) == False:
                                 self.unmake_move(self.whiteKing)
+                                return True
+                            self.unmake_move(self.whiteKing)
                 else:
                     if self.board[king_square[0]][king_square[1]].unicode == '\u265A' and self.board[rook_square[0]][rook_square[1]].unicode == '\u265C' and self.board[long_square1[0]][long_square1[1]] == 'empty-block' and self.board[long_square2[0]][long_square2[1]] == 'empty-block' and self.board[long_square3[0]][long_square3[1]]== 'empty-block':
                         if not white_king_has_moved[-1] and not white_rook_gm0_left_has_moved[-1]:
-                            if self.king_is_threatened(color) == False:
-                                self.make_move(self.whiteKing, long_square1[0], long_square1[1], keep_history=True)
-                                # If the square next to is not threatened
-                                if self.king_is_threatened(color, (long_square1[0], long_square1[1])) == False:
-                                    self.unmake_move(self.whiteKing)
-                                    return True
+#                            if self.king_is_threatened(color) == False:
+                            self.make_move(self.whiteKing, long_square1[0], long_square1[1], keep_history=True)
+                            # If the square next to is not threatened
+                            if self.king_is_threatened(color, (long_square1[0], long_square1[1])) == False:
                                 self.unmake_move(self.whiteKing)
+                                return True
+                            self.unmake_move(self.whiteKing)
         elif color == "black":
             if self.board[king_square[0]][king_square[1]] != 'empty-block' and self.board[rook_square[0]][rook_square[1]] != 'empty-block':
                     # If the pieces are a king and a rook, and the squares in between are empty
@@ -428,14 +524,14 @@ class Board:
                             # If neither the king or rook has moved
                         if not black_king_gm1_has_moved[-1] and not black_rook_gm1_left_has_moved[-1]:
                                 # If the king is not in check
-                            if self.king_is_threatened(color) == False:
+                            #if self.king_is_threatened(color) == False:
 
-                                self.make_move(self.blackKing, short_square1[0], short_square1[1],keep_history=True)
-                                    # If the square next to is not threatened
-                                if self.king_is_threatened(color, (short_square1[0], short_square1[1])) == False:
-                                    self.unmake_move(self.blackKing)
-                                    return True
+                            self.make_move(self.blackKing, short_square1[0], short_square1[1],keep_history=True)
+                                # If the square next to is not threatened
+                            if self.king_is_threatened(color, (short_square1[0], short_square1[1])) == False:
                                 self.unmake_move(self.blackKing)
+                                return True
+                            self.unmake_move(self.blackKing)
                 else:
                     if self.board[king_square[0]][king_square[1]].unicode == '\u2654' and \
                             self.board[rook_square[0]][rook_square[1]].unicode == '\u2656' and \
@@ -443,13 +539,13 @@ class Board:
                             self.board[long_square2[0]][long_square2[1]] == 'empty-block' and \
                             self.board[long_square3[0]][long_square3[1]] == 'empty-block':
                         if not black_king_gm1_has_moved[-1] and not black_rook_gm1_right_has_moved[-1]:
-                            if self.king_is_threatened(color) == False:
-                                self.make_move(self.blackKing, long_square1[0], long_square1[1], keep_history=True)
-                                    # If the square next to is not threatened
-                                if self.king_is_threatened(color, (long_square1[0], long_square1[1])) == False:
-                                    self.unmake_move(self.blackKing)
-                                    return True
+                            #if self.king_is_threatened(color) == False:
+                            self.make_move(self.blackKing, long_square1[0], long_square1[1], keep_history=True)
+                                # If the square next to is not threatened
+                            if self.king_is_threatened(color, (long_square1[0], long_square1[1])) == False:
                                 self.unmake_move(self.blackKing)
+                                return True
+                            self.unmake_move(self.blackKing)
 
     def has_castling(self,board,color):
         moves = []
@@ -459,20 +555,17 @@ class Board:
             if self.specific_castle(board,color,True,(0,4),(0,0),long_square1=(0,1),long_square2=(0,2),long_square3=(0,3)):
                 moves.append((0,2))
             #if self.specific_castle(board,color,False,(7,3),(7,0),short_square1=(7,1),short_square2=(7,2)):
-             #   moves.append((7,1))
+            #    moves.append((7,1))
             #if self.specific_castle(board,color,True,(7,3),(7,7),long_square1=(7,4),long_square2=(7,5),long_square3=(7,6)):
-              #  moves.append((7,5))
+            #    moves.append((7,5))
         else:
             if self.specific_castle(board,color,False,(0,3),(0,0),short_square1=(0,1),short_square2=(0,2)):
                 moves.append((0,1))
             if self.specific_castle(board,color,True,(0,3),(0,7),long_square1=(0,4),long_square2=(0,5),long_square3=(0,6)):
                 moves.append((0,5))
-            #if self.specific_castle(board,color,False,(7,3),(7,0),short_square1=(7,1),short_square2=(7,2)):
-             #   moves.append((7,1))
-            #if self.specific_castle(board,color,True,(7,3),(7,7),long_square1=(7,4),long_square2=(7,5),long_square3=(7,6)):
-             #   moves.append((7,5))
+            #if self.specific_castle(board,color,False,(7,4),(7,7),short_square1=(7,6),short_square2=(7,5)):
+            #    moves.append((7,1))
+            #if self.specific_castle(board,color,True,(7,4),(7,0),long_square1=(7,3),long_square2=(7,2),long_square3=(7,1)):
+            #    moves.append((7,5))
 
         return moves
-
-
-
